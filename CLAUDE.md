@@ -75,12 +75,17 @@ This file contains important instructions and guidelines for working on this pro
 - Note any unresolved issues or areas needing attention
 - This helps maintain continuity across disconnected sessions
 
-### When to Update History
-- After implementing major features or fixes
-- When completing a significant milestone  
-- Before ending a session or when conversation context is getting full
-- When user provides important context or feedback
-- After resolving complex technical issues
+### Active Task Management
+- **ALWAYS update the TODO.md file** as tasks progress or priorities change
+- Mark tasks as completed [x], in progress [🔄], blocked [⏸️], or parked [💡]
+- Reference TODO.md to maintain focus during detailed work and avoid losing track of main goals
+- Update task status continuously: "completed this", "stopped halfway on that", etc.
+- Use TODO.md to remember primary objectives when getting distracted by side tasks
+
+### When to Update These Files
+- **CODE_HISTORY.md**: After implementing major features, completing milestones, before ending sessions
+- **TODO.md**: Continuously as tasks progress, priorities shift, or new tasks emerge
+- Both files help maintain context across disconnected sessions and track overall progress
 
 ---
 
