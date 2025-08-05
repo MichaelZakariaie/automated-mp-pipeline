@@ -1,0 +1,37 @@
+# Regression Configuration
+# Predict continuous PCL scores instead of binary PTSD classification
+
+target: pcl_score  # Regression target
+
+n_folds: 5
+n_iterations: 5
+
+sample_fraction: 1.0
+
+pca_components: []
+
+# Run all variations
+variations:
+  regular: true
+  regular_filtered: true
+  kfold: true
+  kfold_filtered: true
+
+# PCL filtering still applies - removes intermediate scores
+pcl_filtering:
+  remove_intermediate: true
+  ptsd_threshold: 33
+  buffer: 8
+
+output:
+  base_dir: ml_output
+  generate_report: true
+  
+scp:
+  enabled: false
+  destination: /Users/michaelzakariaie/Desktop
+
+advanced:
+  random_state: 42
+  test_size: 0.2
+  delay_between_runs: 2

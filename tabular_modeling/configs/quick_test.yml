@@ -1,0 +1,39 @@
+# Quick Test Configuration
+# Runs fewer variations with smaller sample for testing
+
+target: ptsd_bin
+
+# Reduced k-fold settings for speed
+n_folds: 3
+n_iterations: 2
+
+# Use only 20% of data for quick testing
+sample_fraction: 0.2
+
+# No PCA for quick test
+pca_components: []
+
+# Only run basic variations
+variations:
+  regular: true
+  regular_filtered: false
+  kfold: true
+  kfold_filtered: false
+
+pcl_filtering:
+  remove_intermediate: true
+  ptsd_threshold: 33
+  buffer: 8
+
+output:
+  base_dir: ml_output
+  generate_report: true
+  
+scp:
+  enabled: true
+  destination: /Users/michaelzakariaie/Desktop
+
+advanced:
+  random_state: 42
+  test_size: 0.2
+  delay_between_runs: 1

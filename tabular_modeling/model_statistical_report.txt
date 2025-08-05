@@ -1,0 +1,124 @@
+================================================================================
+STATISTICAL ANALYSIS OF ML MODELS FOR PTSD PREDICTION
+================================================================================
+
+DATASET INFORMATION:
+Total samples: 481
+Training samples: 384
+Test samples: 97
+
+BASELINE PERFORMANCE:
+Majority class baseline (always predict positive): 0.5361
+Random baseline (respecting class distribution): 0.5361
+Pure chance (50/50): 0.5000
+
+STATISTICAL SIGNIFICANCE:
+P-value thresholds:
+  - p < 0.05  : * (statistically significant)
+  - p < 0.01  : ** (highly significant)
+  - p < 0.001 : *** (very highly significant)
+
+MODEL PERFORMANCE ANALYSIS:
+--------------------------------------------------------------------------------
+
+RANDOM FOREST:
+  Accuracy:  0.5773
+  Precision: 0.5846
+  Recall:    0.7308
+  F1 Score:  0.6496
+  AUC:       0.5803
+
+  Statistical Tests:
+    vs. Majority Baseline (0.5361):
+      Binomial test p-value: 0.3061 (ns)
+    vs. Pure Chance (0.5000):
+      Binomial test p-value: 0.1114 (ns)
+    Permutation test p-value: 0.1290 (ns)
+    McNemar test p-value: 0.5959 (ns)
+
+  ✗ Model does NOT perform significantly better than majority baseline
+  ✗ AUC ≤ 0.6 suggests poor discriminative ability
+
+GRADIENT BOOSTING:
+  Accuracy:  0.5464
+  Precision: 0.5625
+  Recall:    0.6923
+  F1 Score:  0.6207
+  AUC:       0.5303
+
+  Statistical Tests:
+    vs. Majority Baseline (0.5361):
+      Binomial test p-value: 0.5415 (ns)
+    vs. Pure Chance (0.5000):
+      Binomial test p-value: 0.2713 (ns)
+    Permutation test p-value: 0.2910 (ns)
+    McNemar test p-value: 1.0000 (ns)
+
+  ✗ Model does NOT perform significantly better than majority baseline
+  ✗ AUC ≤ 0.6 suggests poor discriminative ability
+
+XGBOOST:
+  Accuracy:  0.5155
+  Precision: 0.5439
+  Recall:    0.5962
+  F1 Score:  0.5688
+  AUC:       0.5051
+
+  Statistical Tests:
+    vs. Majority Baseline (0.5361):
+      Binomial test p-value: 0.7622 (ns)
+    vs. Pure Chance (0.5000):
+      Binomial test p-value: 0.5000 (ns)
+    Permutation test p-value: 0.5360 (ns)
+    McNemar test p-value: 0.8744 (ns)
+
+  ✗ Model does NOT perform significantly better than majority baseline
+  ✗ AUC ≤ 0.6 suggests poor discriminative ability
+
+SVM:
+  Accuracy:  0.4742
+  Precision: 0.5079
+  Recall:    0.6154
+  F1 Score:  0.5565
+  AUC:       0.5197
+
+  Statistical Tests:
+    vs. Majority Baseline (0.5361):
+      Binomial test p-value: 0.9070 (ns)
+    vs. Pure Chance (0.5000):
+      Binomial test p-value: 0.7287 (ns)
+    Permutation test p-value: 0.8280 (ns)
+    McNemar test p-value: 0.3912 (ns)
+
+  ✗ Model does NOT perform significantly better than majority baseline
+  ✗ AUC ≤ 0.6 suggests poor discriminative ability
+
+NEURAL NETWORK:
+  Accuracy:  0.5361
+  Precision: 0.5556
+  Recall:    0.6731
+  F1 Score:  0.6087
+  AUC:       0.5056
+
+  Statistical Tests:
+    vs. Majority Baseline (0.5361):
+      Binomial test p-value: 0.5415 (ns)
+    vs. Pure Chance (0.5000):
+      Binomial test p-value: 0.2713 (ns)
+    Permutation test p-value: 0.3730 (ns)
+    McNemar test p-value: 0.8638 (ns)
+
+  ✗ Model does NOT perform significantly better than majority baseline
+  ✗ AUC ≤ 0.6 suggests poor discriminative ability
+
+================================================================================
+SUMMARY:
+================================================================================
+
+Models significantly better than majority baseline: 0/5
+
+Best model by AUC: Random Forest (AUC = 0.5803)
+
+OVERALL CONCLUSION:
+⚠️  No models perform significantly better than the majority baseline.
+   The features may not be strongly predictive of PTSD status.

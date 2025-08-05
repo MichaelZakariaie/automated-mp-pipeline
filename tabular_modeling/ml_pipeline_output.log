@@ -1,0 +1,56 @@
+PyTorch not available. Skipping PyTorch-based neural networks.
+==================================================
+Starting ML Pipeline
+==================================================
+Loading data from processed_sessions/all_sessions_with_pcl.parquet...
+Data shape: (496, 987)
+Removing 15 rows with missing pcl_score
+Data shape after removing missing targets: (481, 987)
+Features: 984 columns
+Target distribution:
+pcl_score
+28    22
+49    15
+35    15
+33    14
+45    14
+      ..
+4      1
+72     1
+80     1
+0      1
+2      1
+Name: count, Length: 74, dtype: Int64
+
+Preprocessing data...
+Traceback (most recent call last):
+  File "ml_pipeline.py", line 834, in <module>
+    main()
+  File "ml_pipeline.py", line 826, in main
+    pipeline.run_pipeline()
+  File "ml_pipeline.py", line 783, in run_pipeline
+    self.preprocess_data()
+  File "ml_pipeline.py", line 275, in preprocess_data
+    self.X_train_processed = self.preprocessor.fit_transform(self.X_train)
+  File "/home/michael/.local/lib/python3.8/site-packages/sklearn/base.py", line 1152, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+  File "/home/michael/.local/lib/python3.8/site-packages/sklearn/pipeline.py", line 471, in fit_transform
+    Xt = self._fit(X, y, **fit_params_steps)
+  File "/home/michael/.local/lib/python3.8/site-packages/sklearn/pipeline.py", line 377, in _fit
+    X, fitted_transformer = fit_transform_one_cached(
+  File "/usr/local/anaconda3/lib/python3.8/site-packages/joblib/memory.py", line 349, in __call__
+    return self.func(*args, **kwargs)
+  File "/home/michael/.local/lib/python3.8/site-packages/sklearn/pipeline.py", line 957, in _fit_transform_one
+    res = transformer.fit_transform(X, y, **fit_params)
+  File "/home/michael/.local/lib/python3.8/site-packages/sklearn/utils/_set_output.py", line 157, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+  File "/home/michael/.local/lib/python3.8/site-packages/sklearn/base.py", line 916, in fit_transform
+    return self.fit(X, **fit_params).transform(X)
+  File "/home/michael/.local/lib/python3.8/site-packages/sklearn/base.py", line 1152, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+  File "/home/michael/.local/lib/python3.8/site-packages/sklearn/impute/_base.py", line 369, in fit
+    X = self._validate_input(X, in_fit=True)
+  File "/home/michael/.local/lib/python3.8/site-packages/sklearn/impute/_base.py", line 330, in _validate_input
+    raise new_ve from None
+ValueError: Cannot use median strategy with non-numeric data:
+could not convert string to float: 'good'

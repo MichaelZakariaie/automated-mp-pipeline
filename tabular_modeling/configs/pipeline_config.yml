@@ -1,0 +1,55 @@
+# ML Pipeline Configuration File
+# All settings for run_all_variations.py
+
+# Target variable for prediction
+# Options: 'ptsd_bin' (binary classification) or 'pcl_score' (regression)
+target: ptsd_bin
+
+# K-fold cross-validation settings
+n_folds: 5          # Number of folds for k-fold cross-validation
+n_iterations: 5     # Number of times to repeat k-fold with different random states
+
+# Data sampling
+# Use < 1.0 for faster testing with subset of data
+sample_fraction: 1.0
+
+# PCA settings
+# Leave empty list [] to skip PCA variations
+# Add component numbers to test PCA with different dimensions
+# Example: [10, 20, 50, 100, 200]
+pca_components: []
+
+# Which pipeline variations to run
+# Set to true/false to enable/disable each variation
+variations:
+  regular: true                    # Single train/test split
+  regular_filtered: true           # Single split with PCL filtering (remove scores 25-41)
+  kfold: true                      # K-fold cross-validation
+  kfold_filtered: true             # K-fold with PCL filtering
+
+# PCL filtering settings (for filtered variations)
+pcl_filtering:
+  remove_intermediate: true        # Whether to remove intermediate PCL scores
+  ptsd_threshold: 33              # PCL threshold for PTSD diagnosis
+  buffer: 8                       # Buffer around threshold (will remove scores from 25-41)
+
+# Output and reporting settings
+output:
+  base_dir: ml_output             # Base directory for all outputs
+  generate_report: true           # Whether to generate combined report after runs
+  
+# SCP transfer settings
+scp:
+  enabled: true                  # Set to true to show SCP command after completion
+  destination: /Users/michaelzakariaie/Desktop/Insight_Runs  # Local destination path
+
+# Advanced settings
+advanced:
+  random_state: 42                # Base random seed for reproducibility
+  test_size: 0.2                  # Test set size for regular train/test split
+  delay_between_runs: 2           # Seconds to wait between pipeline runs
+  
+# Hyperparameter tuning (optional, not implemented in current version)
+# hyperparameter_tuning:
+#   enabled: false
+#   models: ['XGBoost', 'Random Forest']

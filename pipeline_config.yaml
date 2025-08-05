@@ -1,0 +1,113 @@
+# Automated MP Pipeline Configuration
+
+# Pipeline Mode Selection
+pipeline:
+  # Mode can be 'aws' (pull from AWS) or 'local_cv' (run computer vision locally)
+  mode: aws  # Change to 'local_cv' when ready for local processing
+  
+  # Output directories
+  output_dir: ./pipeline_output
+  temp_dir: ./pipeline_temp
+  reports_dir: ./pipeline_reports
+
+# Computer Vision Settings (for local_cv mode)
+computer_vision:
+  # Input video directory (when videos are available)
+  video_input_dir: ./input_videos
+  
+  # Dummy data generation settings (for testing)
+  use_dummy_data: true
+  dummy_sessions_count: 10
+  dummy_trials_per_session: 140
+  
+  # Time series output format settings
+  output_format: parquet
+  fps: 30
+  
+  # Future CV algorithm settings (placeholder)
+  algorithms:
+    - face_detection
+    - gaze_tracking
+    - emotion_recognition
+
+# AWS Settings (for aws mode)
+aws:
+  # S3 settings
+  s3_bucket: senseye-data-quality
+  s3_prefix: messy_prototyping_saturn_uploads
+  
+  # Athena settings
+  database: data_quality
+  pcl_table: mp_pcl_scores
+  
+  # Download settings
+  parallel_downloads: 4
+  skip_existing: true
+
+# Yochlol Time Series Analysis Settings
+yochlol:
+  # Data processing
+  compliance_metrics: true
+  wrangle_time_series: true
+  
+  # Model settings
+  rocket_chunksize: 256
+  task: face_pairs
+  
+  # Output settings
+  save_wrangled: true
+  save_results: true
+
+# Tabular Modeling Settings
+tabular_modeling:
+  # Feature processing
+  features_per_trial: 7
+  total_trials: 140
+  
+  # ML pipeline settings
+  sample_fraction: 1.0
+  test_size: 0.2
+  n_iterations: 5
+  
+  # Model selection
+  models:
+    - Random Forest
+    - XGBoost
+    - Gradient Boosting
+    - SVM
+    - Neural Network
+  
+  # Targets
+  targets:
+    - ptsd_bin
+    - pcl_score
+  
+  # Advanced features
+  use_rfecv: true
+  hyperparameter_tuning: true
+
+# Execution Settings
+execution:
+  # Logging
+  log_level: INFO
+  log_file: pipeline_execution.log
+  
+  # Error handling
+  continue_on_error: false
+  retry_attempts: 3
+  
+  # Resource management
+  n_jobs: -1  # Use all available cores
+  memory_limit: null  # No limit, or specify in GB
+
+# Report Generation
+reporting:
+  generate_combined_report: true
+  include_visualizations: true
+  report_format: html
+  
+  # Email notifications (optional)
+  email_notifications:
+    enabled: false
+    recipients: []
+    smtp_server: null

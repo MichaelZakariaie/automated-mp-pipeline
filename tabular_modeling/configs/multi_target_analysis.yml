@@ -1,0 +1,54 @@
+# Multi-Target Analysis Configuration
+# Runs 6 variations total:
+# - Binary classification (ptsd_bin): regular, regular_filtered, kfold, kfold_filtered
+# - Regression (pcl_score): regular, kfold (no filtering)
+
+# This uses the multi_target configuration to run different targets with different variations
+multi_target:
+  # Binary classification with and without PCL filtering
+  - target: ptsd_bin
+    variations:
+      regular: true           # Binary classification - regular
+      regular_filtered: true  # Binary classification - regular with PCL filtering
+      kfold: true            # Binary classification - k-fold
+      kfold_filtered: true   # Binary classification - k-fold with PCL filtering
+
+  # Regression without PCL filtering
+  - target: pcl_score
+    variations:
+      regular: true          # Regression - regular
+      regular_filtered: false # No filtering for regression
+      kfold: true           # Regression - k-fold
+      kfold_filtered: false # No filtering for regression
+
+# Common settings for all runs
+n_folds: 5
+n_iterations: 5
+sample_fraction: 1.0  # Full dataset
+
+# No PCA for this analysis
+pca_components: []
+
+# PCL filtering settings (applied only where specified above)
+pcl_filtering:
+  remove_intermediate: true
+  ptsd_threshold: 33
+  buffer: 8
+
+# Output settings
+output:
+  base_dir: ml_output
+  generate_report: true
+
+# SCP settings
+scp:
+  enabled: false
+  destination: /Users/michaelzakariaie/Desktop
+
+# Advanced settings
+advanced:
+  random_state: 42
+  test_size: 0.2
+  delay_between_runs: 2
+
+# Note: The standard 'target' and 'variations' fields are ignored when multi_target is present

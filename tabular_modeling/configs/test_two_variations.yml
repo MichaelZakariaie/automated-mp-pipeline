@@ -1,0 +1,42 @@
+# Test Configuration - Just Two Variations
+# Testing the bug fix with fewer variations
+
+# This configuration uses the multi_target feature to run different targets with different settings
+multi_target:
+  # Binary classification variations (2 total)
+  - target: ptsd_bin
+    variations:
+      regular: true           # Variation 1: Binary - regular
+      regular_filtered: true  # Variation 2: Binary - regular filtered
+      kfold: false           # Disable k-fold for now
+      kfold_filtered: false  # Disable k-fold for now
+
+# K-fold settings
+n_folds: 5          # 5-fold cross-validation
+n_iterations: 1     # Repeat k-fold 1 time for faster testing
+
+# Data settings
+sample_fraction: 0.05  # Use small sample for faster testing
+pca_components: []    # No PCA analysis
+
+# PCL filtering settings (only applied to binary classification)
+pcl_filtering:
+  remove_intermediate: true
+  ptsd_threshold: 33
+  buffer: 8
+
+# Output settings
+output:
+  base_dir: ml_output
+  generate_report: true
+
+# SCP transfer settings
+scp:
+  enabled: true  # Show SCP command after completion
+  destination: /Users/michaelzakariaie/Desktop
+
+# Advanced settings
+advanced:
+  random_state: 42
+  test_size: 0.2
+  delay_between_runs: 5  # Longer delay to ensure unique timestamps
