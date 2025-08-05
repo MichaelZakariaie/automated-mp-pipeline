@@ -18,12 +18,13 @@ class ComputerVisionDataGenerator:
     """Generate dummy CV time series data matching expected format"""
     
     def __init__(self, output_dir='cv_output', sessions_count=10, 
-                 trials_per_session=140, fps=30):
+                 trials_per_session=140, fps=30, cohort_manager=None):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.sessions_count = sessions_count
         self.trials_per_session = trials_per_session
         self.fps = fps
+        self.cohort_manager = cohort_manager
         
         # Define data schemas matching yochlol expectations
         self.time_series_features = [
@@ -54,10 +55,12 @@ class ComputerVisionDataGenerator:
     def generate_time_series_data(self, duration_seconds=300):
         """Generate time series data for a single session"""
         n_frames = int(duration_seconds * self.fps)
+        # Calculate interval in milliseconds and round to avoid floating point issues
+        interval_ms = round(1000 / self.fps)
         timestamps = pd.date_range(
             start=datetime.now() - timedelta(days=random.randint(1, 30)),
             periods=n_frames,
-            freq=f'{1000/self.fps}ms'
+            freq=f'{interval_ms}ms'
         )
         
         data = {
@@ -149,7 +152,17 @@ class ComputerVisionDataGenerator:
     
     def save_trial_data(self, data, session_id):
         """Save trial data in format expected by tabular modeling"""
-        filename = f"{session_id}_{int(datetime.now().timestamp() * 1000)}_inter_pir_face_pairs_v2_latedwell_pog.parquet"
+        if self.cohort_manager:
+            # Use cohort-specific file pattern
+            patterns = self.cohort_manager.get_file_patterns()
+            filename = patterns['session_file_pattern'].format(
+                session_id=session_id,
+                timestamp=int(datetime.now().timestamp() * 1000)
+            )
+        else:
+            # Default pattern
+            filename = f"{session_id}_{int(datetime.now().timestamp() * 1000)}_inter_pir_face_pairs_v2_latedwell_pog.parquet"
+        
         filepath = self.output_dir / 'trials' / filename
         filepath.parent.mkdir(exist_ok=True)
         
@@ -162,8 +175,16 @@ class ComputerVisionDataGenerator:
         filepath = self.output_dir / 'compliance' / filename
         filepath.parent.mkdir(exist_ok=True)
         
+        # Convert numpy types to native Python types for JSON serialization
+        serializable_metrics = {}
+        for key, value in metrics.items():
+            if hasattr(value, 'item'):  # numpy scalar types
+                serializable_metrics[key] = value.item()
+            else:
+                serializable_metrics[key] = value
+        
         with open(filepath, 'w') as f:
-            json.dump(metrics, f, indent=2)
+            json.dump(serializable_metrics, f, indent=2)
         
         return filepath
     

@@ -1,0 +1,115 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+env/
+env_*/
+venv/
+ENV/
+env.bak/
+venv.bak/
+test_env/
+
+# Pipeline Output and Temporary Files
+pipeline_output/
+pipeline_reports/
+cv_output/
+temp/
+*.log
+*.tmp
+*.temp
+
+# Data Files
+*.parquet
+*.csv
+*.json
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# AWS Credentials (safety)
+.aws/
+credentials
+*.pem
+
+# Model files and large data
+models/
+*.model
+*.joblib
+*.pt
+*.pth
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# OS generated files
+*.swp
+*.swo
+*~
+
+# Configuration overrides (keep templates)
+local_config.yaml
+override_config.yaml
+
+# Test artifacts
+.coverage
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+pytest.ini
+tox.ini
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+*.sublime-project
+*.sublime-workspace
+
+# Documentation build
+docs/_build/

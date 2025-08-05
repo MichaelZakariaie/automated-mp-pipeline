@@ -63,12 +63,58 @@ python run_pipeline.py status
 
 ## Configuration
 
+### Main Configuration
+
 Edit `pipeline_config.yaml` to control the pipeline behavior:
 
 ### Switch Between AWS and Local CV Mode
 ```yaml
 pipeline:
   mode: aws  # Change to 'local_cv' for local processing
+  cohort: default  # Specify which cohort configuration to use
+```
+
+### Cohort Configuration
+
+The pipeline supports multiple cohort configurations defined in `cohort_config.yaml`. This allows you to:
+- Use different S3 buckets and paths for different cohorts
+- Configure different tasks and trial counts
+- Specify cohort-specific file naming patterns
+- Use different database tables
+
+#### Using a Specific Cohort
+```bash
+# Option 1: Specify cohort in command line
+python run_pipeline.py time_series --cohort cohort_6
+
+# Option 2: Update pipeline_config.yaml
+# Set cohort: cohort_6 in the file
+
+# Option 3: Update hardcoded values in scripts
+python update_cohort_scripts.py --cohort cohort_6
+```
+
+#### Adding a New Cohort
+
+Edit `cohort_config.yaml` and add your cohort configuration:
+
+```yaml
+cohorts:
+  my_new_cohort:
+    cohort_id: 7
+    description: "Cohort 7 - Fall 2024"
+    s3:
+      compliance_bucket: "senseye-ptsd"
+      compliance_prefix: "public/ptsd_ios/cohort_7/"
+      data_bucket: "senseye-data-quality"
+      data_prefix: "cohort_7_uploads/"
+    athena:
+      database: "data_quality"
+      tables:
+        pcl_scores: "mp_pcl_scores_cohort7"
+    tasks:
+      available: ["face_pairs", "new_task"]
+      default: ["face_pairs"]
 ```
 
 ### Configure Computer Vision (for future local processing)

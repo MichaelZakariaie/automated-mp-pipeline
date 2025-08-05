@@ -29,6 +29,7 @@ from tabular_modeling import (
 
 # Import our custom modules
 from cv_data_generator import ComputerVisionDataGenerator
+from cohort_manager import CohortConfigManager
 
 
 class AutomatedMPPipeline:
@@ -37,6 +38,7 @@ class AutomatedMPPipeline:
     def __init__(self, config_path='pipeline_config.yaml'):
         """Initialize pipeline with configuration"""
         self.config = self._load_config(config_path)
+        self.cohort_manager = CohortConfigManager(config_path)
         self.setup_logging()
         self.setup_directories()
         
@@ -117,6 +119,15 @@ class AutomatedMPPipeline:
         """Pull time series data from AWS using yochlol approach"""
         self.logger.info("Pulling time series data from AWS")
         
+        # Get cohort-specific environment variables
+        yochlol_env = os.environ.copy()
+        yochlol_env.update(self.cohort_manager.get_yochlol_env_vars())
+        
+        # Log cohort information
+        self.logger.info(f"Using cohort: {self.cohort_manager.active_cohort}")
+        self.logger.info(f"S3 bucket: {yochlol_env['BUCKET_NAME']}")
+        self.logger.info(f"S3 prefix: {yochlol_env['S3_PREFIX']}")
+        
         # Change to yochlol directory for relative paths
         original_cwd = os.getcwd()
         os.chdir(Path(__file__).parent / 'yochlol')
@@ -130,25 +141,25 @@ class AutomatedMPPipeline:
                 self.logger.info("Downloading compliance videos")
                 subprocess.run([
                     sys.executable, 'download_compliance_vids.py'
-                ], check=True)
+                ], env=yochlol_env, check=True)
                 
                 # Run compliance analysis
                 self.logger.info("Running compliance analysis")
                 subprocess.run([
                     sys.executable, 'run_compliance.py',
                     '--limit', '10'  # Limit for testing
-                ], check=True)
+                ], env=yochlol_env, check=True)
                 
                 # Get compliance stats
                 subprocess.run([
                     sys.executable, 'get_stats.py'
-                ], check=True)
+                ], env=yochlol_env, check=True)
             
             # Get PTSD data from AWS
             self.logger.info("Fetching PTSD data from AWS")
             subprocess.run([
                 sys.executable, 'get_data.py', '--save'
-            ], check=True)
+            ], env=yochlol_env, check=True)
             
         finally:
             os.chdir(original_cwd)
@@ -228,6 +239,15 @@ class AutomatedMPPipeline:
         """
         self.logger.info("Starting Stage 3: Tabular Analysis")
         
+        # Get cohort-specific environment variables
+        tabular_env = os.environ.copy()
+        tabular_env.update(self.cohort_manager.get_tabular_env_vars())
+        
+        # Log cohort information
+        self.logger.info(f"Using cohort: {self.cohort_manager.active_cohort}")
+        self.logger.info(f"S3 bucket: {tabular_env['S3_BUCKET']}")
+        self.logger.info(f"S3 prefix: {tabular_env['S3_PREFIX']}")
+        
         # Change to tabular_modeling directory
         original_cwd = os.getcwd()
         os.chdir(Path(__file__).parent / 'tabular_modeling')
@@ -237,7 +257,7 @@ class AutomatedMPPipeline:
             self.logger.info("Downloading session data from S3")
             subprocess.run([
                 sys.executable, 'download_s3_sessions.py'
-            ], check=True)
+            ], env=tabular_env, check=True)
             
             # Process all sessions
             self.logger.info("Processing session data")

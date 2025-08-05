@@ -1,0 +1,55 @@
+# Yochlol Requirements (extracted from yochlol.yml)
+# Core dependencies
+numpy>=1.20.0
+pandas>=1.5.0
+python-dateutil>=2.8.0
+pytz>=2021.1
+
+# AWS dependencies
+boto3>=1.20.0
+awswrangler>=3.0.0
+botocore>=1.20.0
+
+# Machine Learning
+torch>=2.0.0
+torchvision>=0.15.0
+scikit-learn>=1.0.0
+scipy>=1.7.0
+
+# AutoML
+flaml>=2.0.0
+
+# Time Series
+tsai>=0.3.0
+pyts>=0.12.0
+
+# Data processing
+pyarrow>=5.0.0
+tqdm>=4.60.0
+
+# Visualization
+matplotlib>=3.5.0
+mplcyberpunk>=0.7.0
+
+# NLP (for spacy features)
+spacy>=3.4.0
+
+# Statistical
+statsmodels>=0.13.0
+
+# Utilities
+pyyaml>=6.0.0
+requests>=2.25.0
+click>=8.0.0
+rich>=12.0.0
+
+# Development
+ipykernel>=6.0.0
+jupyter>=1.0.0
+
+# Additional yochlol-specific
+psutil>=5.8.0
+filelock>=3.0.0
+jinja2>=3.0.0
+sympy>=1.9.0
+networkx>=2.6.0

@@ -21,7 +21,7 @@ def load_config(config_path='pipeline_config.yaml'):
         return yaml.safe_load(f)
 
 
-def run_time_series_pipeline(config_path='pipeline_config.yaml'):
+def run_time_series_pipeline(config_path='pipeline_config.yaml', cohort=None):
     """
     Run the time series portion of the pipeline
     This includes CV processing (or AWS pull) and time series analysis
@@ -34,8 +34,10 @@ def run_time_series_pipeline(config_path='pipeline_config.yaml'):
     
     config = load_config(config_path)
     mode = config['pipeline']['mode']
+    active_cohort = cohort or config['pipeline'].get('cohort', 'default')
     
     print(f"Running in {mode.upper()} mode")
+    print(f"Cohort: {active_cohort}")
     print()
     
     if mode == 'local_cv':
@@ -195,6 +197,8 @@ Examples:
     parser.add_argument('--config', 
                         default='pipeline_config.yaml',
                         help='Path to configuration file')
+    parser.add_argument('--cohort',
+                        help='Cohort name to use (overrides config file)')
     
     args = parser.parse_args()
     
@@ -202,9 +206,16 @@ Examples:
     script_dir = Path(__file__).parent
     os.chdir(script_dir)
     
+    # Update config with cohort if specified
+    if args.cohort:
+        config = load_config(args.config)
+        config['pipeline']['cohort'] = args.cohort
+        with open(args.config, 'w') as f:
+            yaml.dump(config, f, default_flow_style=False)
+    
     # Run the requested command
     if args.command == 'time_series':
-        return run_time_series_pipeline(args.config)
+        return run_time_series_pipeline(args.config, args.cohort)
     elif args.command == 'tabular':
         return run_tabular_pipeline(args.config)
     elif args.command == 'status':

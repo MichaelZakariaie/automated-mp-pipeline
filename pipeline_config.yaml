@@ -5,6 +5,10 @@ pipeline:
   # Mode can be 'aws' (pull from AWS) or 'local_cv' (run computer vision locally)
   mode: aws  # Change to 'local_cv' when ready for local processing
   
+  # Cohort configuration
+  cohort: default  # Can be 'default', 'cohort_6', or any cohort defined in cohort_config.yaml
+  cohort_config_file: ./cohort_config.yaml
+  
   # Output directories
   output_dir: ./pipeline_output
   temp_dir: ./pipeline_temp

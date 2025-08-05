@@ -1,0 +1,129 @@
+# Cohort-specific Configuration for Automated MP Pipeline
+# This file defines cohort-specific settings that override the main pipeline_config.yaml
+
+# Example cohort configurations
+cohorts:
+  # Default cohort (current hardcoded values)
+  default:
+    cohort_id: 5
+    description: "Default cohort configuration (original hardcoded values)"
+    
+    # AWS S3 locations
+    s3:
+      # For downloading compliance videos (yochlol)
+      compliance_bucket: "senseye-ptsd"
+      compliance_prefix: "public/ptsd_ios/"
+      
+      # For downloading session data (tabular modeling)
+      data_bucket: "senseye-data-quality"
+      data_prefix: "messy_prototyping_saturn_uploads/"
+      
+      # Where to upload generated time series (when running local CV)
+      upload_bucket: "senseye-data-quality"
+      upload_prefix: "messy_prototyping_saturn_uploads/{session_id}/face_pairs/processed_v2/"
+    
+    # AWS Athena database/tables
+    athena:
+      database: "data_quality"
+      tables:
+        surveys: "qualtrics_surveys_unified"
+        pcl_scores: "mp_pcl_scores"
+        raps_scores: "mp_raps_scores"
+        session_completion: "master_query_session_completion_check"
+        app_session_details: "messy_prototyping_app_session_details"
+    
+    # Task configurations
+    tasks:
+      # Available tasks for this cohort
+      available: ["face_pairs", "calibration_1", "calibration_2", "plr", "mckinnon", "attention_bias", "affective_image_set", "list_learning"]
+      
+      # Default tasks to process
+      default: ["face_pairs"]
+      
+      # Video types to download for compliance
+      video_types: ["calibration_1", "plr", "face_pairs", "mckinnon"]
+      
+      # Task-specific sample counts (for time series processing)
+      sample_counts:
+        face_pairs: 140
+        calibration_1: 9
+        calibration_2: 9
+        plr: 90
+        mckinnon: 30
+    
+    # File naming patterns
+    file_patterns:
+      # Pattern for session files in S3
+      session_file_pattern: "{session_id}_inter_pir_face_pairs_v2_latedwell_pog.parquet"
+      
+      # Pattern for time series output files
+      time_series_pattern: "MP_cohort_{cohort_id}_{num_sessions}sessions_{timestamp}_{suffix}.parquet"
+      
+      # Pattern for wrangled time series
+      wrangled_pattern: "wrangled_ts_{task}_{sessions}sessions_{fps}fps_{timestamp}.parquet"
+    
+    # Target variables for ML
+    ml_targets:
+      classification: "ptsd_bin"
+      regression: "pcl_score"
+      # Alternative targets available
+      alternatives:
+        - "raps_binary_ptsd"
+        - "ptsd_severity"
+    
+  # Example configuration for a new cohort
+  cohort_6:
+    cohort_id: 6
+    description: "Cohort 6 - Spring 2024"
+    
+    s3:
+      compliance_bucket: "senseye-ptsd"
+      compliance_prefix: "public/ptsd_ios/cohort_6/"
+      data_bucket: "senseye-data-quality"
+      data_prefix: "cohort_6_saturn_uploads/"
+      upload_bucket: "senseye-data-quality"
+      upload_prefix: "cohort_6_saturn_uploads/{session_id}/face_pairs/processed_v3/"
+    
+    athena:
+      database: "data_quality"
+      tables:
+        surveys: "qualtrics_surveys_unified"
+        pcl_scores: "mp_pcl_scores_v2"  # New version
+        raps_scores: "mp_raps_scores"
+        session_completion: "master_query_session_completion_check"
+        app_session_details: "cohort_6_app_session_details"
+    
+    tasks:
+      available: ["face_pairs", "calibration_1", "calibration_2", "plr", "mckinnon", "new_task_1"]
+      default: ["face_pairs", "new_task_1"]
+      video_types: ["calibration_1", "plr", "face_pairs", "mckinnon", "new_task_1"]
+      sample_counts:
+        face_pairs: 140
+        calibration_1: 9
+        calibration_2: 9
+        plr: 90
+        mckinnon: 30
+        new_task_1: 60
+    
+    file_patterns:
+      session_file_pattern: "{session_id}_cohort6_face_pairs_v3_processed.parquet"
+      time_series_pattern: "Cohort6_{cohort_id}_{num_sessions}sessions_{timestamp}_{suffix}.parquet"
+      wrangled_pattern: "wrangled_c6_{task}_{sessions}sessions_{fps}fps_{timestamp}.parquet"
+    
+    ml_targets:
+      classification: "ptsd_bin"
+      regression: "pcl_score"
+      alternatives:
+        - "new_severity_score"
+
+# Processing parameters that might vary by cohort
+processing:
+  default:
+    download_workers: 24
+    download_buffer: 20
+    max_parallel_sessions: 10
+    
+  cohort_6:
+    download_workers: 32  # More resources available
+    download_buffer: 30
+    max_parallel_sessions: 15
